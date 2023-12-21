@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:alpine
+
+  milena:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - LISTEN_PORT=8000
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - LISTEN_PORT=8000
+
+  curl:
+    image: byrnedo/alpine-curl
+    command: "-i milena:8000/healthcheck"
+    links:
+      - milena
+
